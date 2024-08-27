@@ -19,20 +19,24 @@ type User struct {
 	Password           string             `json:"password" bson:"password"`
 	Email              string             `json:"email" bson:"email"`
 	Bio                string             `json:"bio" bson:"bio"`
-	ProfilePicture     string             `json:"profile_picture" bson:"profile_picture"` // URL to the profile picture
+	ProfilePicture     string             `json:"profile_picture" bson:"profile_picture"`
 	ContactInformation string             `json:"contact_information" bson:"contact_information"`
 	IsAdmin            bool               `json:"isAdmin" bson:"isAdmin"`
 	Active             bool               `json:"active" bson:"active"`
+	VerificationToken  string             `json:"verification_token" bson:"verification_token"`
+	TokenExpiry        time.Time          `json:"token_expiry" bson:"token_expiry"`
 	CreatedAt          time.Time          `json:"created_at" bson:"created_at"`
 }
 
 type UpdateRequest struct {
-	Firstname          string `json:"firstname" bson:"firstname"`
-	Lastname           string `json:"lastname" bson:"lastname"`
-	Username           string `json:"username" bson:"username"`
-	Bio                string `json:"bio" bson:"bio"`
-	ProfilePicture     string `json:"profile_picture" bson:"profile_picture"`
-	ContactInformation string `json:"contact_information" bson:"contact_information"`
+	Firstname          string    `json:"firstname" bson:"firstname"`
+	Lastname           string    `json:"lastname" bson:"lastname"`
+	Username           string    `json:"username" bson:"username"`
+	Bio                string    `json:"bio" bson:"bio"`
+	ProfilePicture     string    `json:"profile_picture" bson:"profile_picture"`
+	ContactInformation string    `json:"contact_information" bson:"contact_information"`
+	VerificationToken  string    `json:"verification_token" bson:"verification_token"`
+	TokenExpiry        time.Time `json:"token_expiry" bson:"token_expiry"`
 }
 
 type UserUsecase interface {
@@ -42,6 +46,7 @@ type UserUsecase interface {
 	Login(ctx context.Context, req LoginRequest) (LoginResponse, error)
 	Logout(ctx context.Context, userID string) error
 	PromoteDemote(ctx context.Context, identifier string, action string) error
+	VerifyEmail(ctx context.Context, email, token string) error
 	// RequestPasswordReset(ctx context.Context, email, frontendBaseURL string) error
 	// ResetPassword(ctx context.Context, req ResetPasswordRequest) error
 }
@@ -54,7 +59,6 @@ type UserRepository interface {
 	UpdatePassword(ctx context.Context, email, newPassword string) error
 	UpdateUser(ctx context.Context, userID primitive.ObjectID, updatedUser UpdateRequest) error
 	PromoteDemote(ctx context.Context, userID primitive.ObjectID, action string) error
-	// ForgetPassword(email string) error
-	// StoreResetToken(ctx context.Context, userID string, resetToken string, expiryHour int) error
-	// DeleteRefreshTokenByUserID(ctx context.Context, userID string) error // used in logout
+	SetVerificationToken(ctx context.Context, email, token string, expiry time.Time) error
+	VerifyEmailToken(ctx context.Context, email, token string) (bool, error)
 }

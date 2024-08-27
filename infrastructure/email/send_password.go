@@ -6,7 +6,7 @@ import (
 	"net/smtp"
 )
 
-func (e *emailService) SendPasswordResetEmail(ctx context.Context, email, resetLink string) error {
+func (e *EmailService) SendPasswordResetEmail(ctx context.Context, email, resetLink string) error {
 	// Set up the email message
 	subject := "Password Reset Request"
 	body := fmt.Sprintf(

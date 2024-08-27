@@ -1,8 +1,10 @@
 package email
 
-import "loan-tracker/domain"
+import (
+	"loan-tracker/domain"
+)
 
-type emailService struct {
+type EmailService struct {
 	SMTPServer   string
 	SMTPPort     string
 	SMTPUser     string
@@ -11,7 +13,7 @@ type emailService struct {
 }
 
 func NewEmailService(server, port, user, password, fromAddress string) domain.EmailService {
-	return &emailService{
+	return &EmailService{
 		SMTPServer:   server,
 		SMTPPort:     port,
 		SMTPUser:     user,
