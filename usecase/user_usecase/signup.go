@@ -53,6 +53,7 @@ func (u *UserUsecase) SignUp(ctx context.Context, req domain.SignupRequest) (dom
 
 	err = u.emailService.SendEmailVerification(user.Email, token)
 	if err != nil {
+		u.DeleteUser(ctx, user.ID)
 		return domain.SignupResponse{}, err
 	}
 
