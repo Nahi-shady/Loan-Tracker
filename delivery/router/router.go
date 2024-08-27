@@ -1,6 +1,7 @@
 package router
 
 import (
+	"loan-tracker/delivery/controller/loan_controller"
 	"loan-tracker/delivery/controller/user_controller"
 	"loan-tracker/infrastructure/auth"
 	"loan-tracker/infrastructure/bootstrap"
@@ -8,9 +9,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SetRouter(router *gin.Engine, uc *user_controller.UserController, env *bootstrap.Env) {
-	router.GET("admin/users/{id}", uc.Profile)
-	router.DELETE("admin/users/{id}", uc.Deleteuser)
+func SetRouter(router *gin.Engine, uc *user_controller.UserController, lc *loan_controller.LoanController, env *bootstrap.Env) {
+	a := router.Group("/admin")
+	a.Use()
+	{
+		a.GET("/users/:id", uc.Profile)
+		a.DELETE("/users/:id", uc.Deleteuser)
+		a.GET("/loans", lc.GetAllLoans)
+	}
+
 	r := router.Group("/users")
 	r.Use()
 	{
@@ -22,6 +29,13 @@ func SetRouter(router *gin.Engine, uc *user_controller.UserController, env *boot
 		r.GET("/verify-email", uc.VerifyEmail)
 		r.GET("/token/refresh", uc.RefreshTokens)
 		r.GET("/profile", uc.Profile)
+	}
+
+	l := router.Group("/loans")
+	l.Use()
+	{
+		l.POST("", auth.JwtAuthMiddleware(env.AccessTokenSecret), lc.ApplyForLoan)
+		a.GET("/loans", lc.GetLoanStatus)
 	}
 
 }
