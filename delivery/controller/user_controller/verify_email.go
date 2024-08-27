@@ -15,11 +15,11 @@ func (uc *UserController) VerifyEmail(ctx *gin.Context) {
 		return
 	}
 
-	err := uc.userUsecase.VerifyEmail(ctx.Request.Context(), email, token)
+	response, err := uc.userUsecase.VerifyEmail(ctx.Request.Context(), email, token)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"message": "Email verified successfully!"})
+	ctx.JSON(http.StatusOK, gin.H{"message": "Email verified successfully!", "token": response.AccessToken})
 }

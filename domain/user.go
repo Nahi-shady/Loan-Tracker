@@ -34,6 +34,7 @@ type UpdateRequest struct {
 	Username           string    `json:"username" bson:"username"`
 	Bio                string    `json:"bio" bson:"bio"`
 	ProfilePicture     string    `json:"profile_picture" bson:"profile_picture"`
+	Active             bool      `json:"active" bson:"active"`
 	ContactInformation string    `json:"contact_information" bson:"contact_information"`
 	VerificationToken  string    `json:"verification_token" bson:"verification_token"`
 	TokenExpiry        time.Time `json:"token_expiry" bson:"token_expiry"`
@@ -42,11 +43,14 @@ type UpdateRequest struct {
 type UserUsecase interface {
 	SignUp(ctx context.Context, req SignupRequest) (SignupResponse, error)
 	GetByUsernameOrEmail(ctx context.Context, identifier string) (User, error)
+	GetByID(ctx context.Context, userID primitive.ObjectID) (User, error)
 	UpdateUser(ctx context.Context, userID primitive.ObjectID, updatedUser UpdateRequest) error
 	Login(ctx context.Context, req LoginRequest) (LoginResponse, error)
 	Logout(ctx context.Context, userID string) error
+	DeleteUser(ctx context.Context, userID primitive.ObjectID) error
+	ResetPassword(ctx context.Context, req ResetPasswordRequest) error
 	PromoteDemote(ctx context.Context, identifier string, action string) error
-	VerifyEmail(ctx context.Context, email, token string) error
+	VerifyEmail(ctx context.Context, email, token string) (LoginResponse, error)
 	// RequestPasswordReset(ctx context.Context, email, frontendBaseURL string) error
 	// ResetPassword(ctx context.Context, req ResetPasswordRequest) error
 }
@@ -55,9 +59,10 @@ type UserRepository interface {
 	Signup(ctx context.Context, user *User) error
 	GetByEmail(ctx context.Context, email string) (User, error)
 	GetByUsername(ctx context.Context, username string) (User, error)
-	GetByID(ctx context.Context, id string) (User, error)
+	GetByID(ctx context.Context, userID primitive.ObjectID) (User, error)
 	UpdatePassword(ctx context.Context, email, newPassword string) error
 	UpdateUser(ctx context.Context, userID primitive.ObjectID, updatedUser UpdateRequest) error
+	DeleteUser(ctx context.Context, userID primitive.ObjectID) error
 	PromoteDemote(ctx context.Context, userID primitive.ObjectID, action string) error
 	SetVerificationToken(ctx context.Context, email, token string, expiry time.Time) error
 	VerifyEmailToken(ctx context.Context, email, token string) (bool, error)

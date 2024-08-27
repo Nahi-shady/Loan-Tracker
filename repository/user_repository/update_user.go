@@ -3,6 +3,7 @@ package user_repository
 import (
 	"context"
 	"loan-tracker/domain"
+	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -35,6 +36,19 @@ func (ur *UserRepository) UpdateUser(ctx context.Context, userID primitive.Objec
 	if updatedUser.ContactInformation != "" {
 		updateSet := update["$set"].(bson.M)
 		updateSet["contract_information"] = updatedUser.ContactInformation
+	}
+	if updatedUser.Active {
+		updateSet := update["$set"].(bson.M)
+		updateSet["active"] = updatedUser.Active
+	}
+	if updatedUser.VerificationToken != "" {
+		updateSet := update["$set"].(bson.M)
+		updateSet["verification_token"] = updatedUser.VerificationToken
+	}
+	none := time.Time{}
+	if updatedUser.TokenExpiry != none {
+		updateSet := update["$set"].(bson.M)
+		updateSet["token_expiry"] = updatedUser.TokenExpiry
 	}
 
 	_, err := collection.UpdateOne(ctx, filter, update)

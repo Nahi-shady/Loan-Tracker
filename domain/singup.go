@@ -9,5 +9,6 @@ type SignupRequest struct {
 }
 
 type SignupResponse struct {
-	AccessToken string `json:"accessToken"`
+	Message string `json:"message"`
+	Success bool   `json:"success"`
 }

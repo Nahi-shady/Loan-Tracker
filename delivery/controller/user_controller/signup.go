@@ -17,7 +17,8 @@ func (uc *UserController) SignUp(c *gin.Context) {
 	}
 
 	resp, err := uc.userUsecase.SignUp(context.Background(), req)
-	if err != nil {
+	r := domain.SignupResponse{}
+	if resp == r {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
