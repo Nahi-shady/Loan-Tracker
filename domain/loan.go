@@ -27,6 +27,7 @@ type LoanUsecase interface {
 	ApplyForLoan(ctx context.Context, userID primitive.ObjectID, loan Loan) (Loan, error)
 	GetLoanByID(ctx context.Context, loanID primitive.ObjectID) (Loan, error)
 	GetAllLoans(ctx context.Context, status string, order string) ([]Loan, error)
+	UpdateLoanStatus(ctx context.Context, loanID primitive.ObjectID, status string) error
 }
 
 type LoanRepository interface {
@@ -35,6 +36,7 @@ type LoanRepository interface {
 	UpdateStatus(ctx context.Context, loanID primitive.ObjectID, status string, timestamp time.Time) error
 	GetLoanByID(ctx context.Context, loanID primitive.ObjectID) (Loan, error)
 	GetAll(ctx context.Context, status string, order string) ([]Loan, error)
+	UpdateLoanStatus(ctx context.Context, loanID primitive.ObjectID, status string) error
 }
 
 type LoanRequest struct {

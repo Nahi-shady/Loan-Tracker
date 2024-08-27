@@ -16,6 +16,7 @@ func SetRouter(router *gin.Engine, uc *user_controller.UserController, lc *loan_
 		a.GET("/users/:id", uc.Profile)
 		a.DELETE("/users/:id", uc.Deleteuser)
 		a.GET("/loans", lc.GetAllLoans)
+		a.PATCH("/loans/:id/status", lc.UpdateLoanStatus)
 	}
 
 	r := router.Group("/users")
