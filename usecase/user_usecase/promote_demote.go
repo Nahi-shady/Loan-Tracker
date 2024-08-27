@@ -5,8 +5,8 @@ import (
 )
 
 func (uc *UserUsecase) PromoteDemote(ctx context.Context, identifier, action string) error {
-	ctx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
-	defer cancel()
+	// ctx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
+	// defer cancel()
 
 	user, err := uc.GetByUsernameOrEmail(ctx, identifier)
 	if err != nil {

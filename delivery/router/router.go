@@ -9,15 +9,15 @@ import (
 )
 
 func SetRouter(router *gin.Engine, uc *user_controller.UserController, env *bootstrap.Env) {
-	// User routes
-	router.POST("/signup", uc.SignUp)
-	router.POST("/login", uc.Login)
-	router.GET("/logout", auth.JwtAuthMiddleware(env.AccessTokenSecret), uc.Logout)
-	router.POST("/promote", auth.JwtAuthMiddleware(env.AccessTokenSecret), uc.PromoteDemote)
-	router.PATCH("/updateUser", auth.JwtAuthMiddleware(env.AccessTokenSecret), uc.UpdateUser)
+	r := router.Group("/users")
+	r.Use()
+	{
+		router.POST("/register", uc.SignUp)
+		router.POST("/login", uc.Login)
+		router.GET("/logout", auth.JwtAuthMiddleware(env.AccessTokenSecret), uc.Logout)
+		router.POST("/promote", auth.JwtAuthMiddleware(env.AccessTokenSecret), uc.PromoteDemote)
+		router.PATCH("/updateUser", auth.JwtAuthMiddleware(env.AccessTokenSecret), uc.UpdateUser)
 
-	// router.POST("/forgot-password", uc.ForgotPassword)
-	// router.POST("/reset-password", uc.ResetPassword)
-	// router.POST("/refresh", uc.RefreshTokens)
+	}
 
 }

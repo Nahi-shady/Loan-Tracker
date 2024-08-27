@@ -18,11 +18,7 @@ func (uc *UserController) Login(c *gin.Context) {
 
 	resp, err := uc.userUsecase.Login(context.Background(), req)
 	if err != nil {
-		if err == domain.ErrInvalidCredentials {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
-		} else {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
-		}
+		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
 

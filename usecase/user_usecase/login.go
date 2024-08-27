@@ -10,7 +10,7 @@ import (
 
 func (u *UserUsecase) Login(ctx context.Context, req domain.LoginRequest) (domain.LoginResponse, error) {
 	// Find user by username or email
-	user, err := u.userRepo.GetByEmail(ctx, req.Identifier)
+	user, err := u.GetByUsernameOrEmail(ctx, req.Identifier)
 	if err != nil {
 		return domain.LoginResponse{}, err
 	}
