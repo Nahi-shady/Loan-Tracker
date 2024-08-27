@@ -17,7 +17,7 @@ func (u *UserUsecase) SignUp(ctx context.Context, req domain.SignupRequest) (dom
 		return domain.SignupResponse{}, err
 	}
 
-	if _, err := u.userRepo.GetByEmail(ctx, req.Email); err != nil {
+	if _, err := u.userRepo.GetByEmail(ctx, req.Email); err == nil {
 		return domain.SignupResponse{}, errors.New("email already in use")
 	}
 

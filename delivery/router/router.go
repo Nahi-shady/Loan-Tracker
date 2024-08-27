@@ -14,7 +14,7 @@ func SetRouter(router *gin.Engine, uc *user_controller.UserController, env *boot
 	router.POST("/login", uc.Login)
 	router.GET("/logout", auth.JwtAuthMiddleware(env.AccessTokenSecret), uc.Logout)
 	router.POST("/promote", auth.JwtAuthMiddleware(env.AccessTokenSecret), uc.PromoteDemote)
-	router.PUT("/updateUser", auth.JwtAuthMiddleware(env.AccessTokenSecret), uc.UpdateUser)
+	router.PATCH("/updateUser", auth.JwtAuthMiddleware(env.AccessTokenSecret), uc.UpdateUser)
 
 	// router.POST("/forgot-password", uc.ForgotPassword)
 	// router.POST("/reset-password", uc.ResetPassword)
