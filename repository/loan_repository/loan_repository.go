@@ -5,17 +5,18 @@ import (
 	"loan-tracker/domain"
 	"time"
 
+	"loan-tracker/mongo"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type LoanRepository struct {
-	collection *mongo.Collection
+	collection mongo.Collection
 }
 
-func NewLoanRepository(collection *mongo.Collection) domain.LoanRepository {
+func NewLoanRepository(collection mongo.Collection) domain.LoanRepository {
 	return &LoanRepository{
 		collection: collection,
 	}
